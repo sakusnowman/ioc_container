@@ -6,6 +6,38 @@ namespace IocLabo.IOC
 {
     class Ioc : IIoc
     {
+        private Dictionary<Type, Type> interfaceTable;
+        public Ioc()
+        {
+            interfaceTable = new Dictionary<Type, Type>();
+        }
+
+        public void Register<TInterface, TImplement>()
+        {
+            IOCException.CheckImplementedInterface<TInterface, TImplement>();
+            if (interfaceTable.ContainsKey(typeof(TInterface)))
+            {
+                interfaceTable[typeof(TInterface)] = typeof(TImplement);
+                return;
+            }
+            interfaceTable.Add(typeof(TInterface), typeof(TImplement));
+        }
+
+        public void RegisterSingleton<TInterface>(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TInterface Resolve<TInterface>()
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Resolve(Type interfaceType)
+        {
+            throw new NotImplementedException();
+        }
+
         public TClass Construct<TClass>(params Type[] argTypes)
         {
             throw new NotImplementedException();
@@ -26,24 +58,6 @@ namespace IocLabo.IOC
             throw new NotImplementedException();
         }
 
-        public void Register<TInterface, TImplement>()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RegisterSingleton<TInterface>(object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TInterface Resolve<TInterface>()
-        {
-            throw new NotImplementedException();
-        }
-
-        public object Resolve(Type interfaceType)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
