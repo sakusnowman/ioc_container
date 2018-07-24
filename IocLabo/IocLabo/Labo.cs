@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using IocLabo.IOC;
+using IocLabo.Activator;
 
 namespace IocLabo
 {
@@ -13,6 +14,7 @@ namespace IocLabo
     public class Labo
     {
         static private IIoc ioc = new Ioc();
+        static private ILaboActivator activator = new LaboActivator(ioc);
 
         /// <summary>
         /// Reset registerd classes.
@@ -20,6 +22,7 @@ namespace IocLabo
         public static void Reset()
         {
             ioc = new Ioc();
+            activator = new LaboActivator(ioc);
         }
 
         /// <summary>
@@ -52,15 +55,15 @@ namespace IocLabo
         /// <typeparam name="TClass"></typeparam>
         /// <param name="argTypes">TClass must have constructor which has these argTypes parameter.</param>
         /// <returns></returns>
-        public static TClass Construct<TClass>(params Type[] argTypes) => ioc.Construct<TClass>(argTypes);
-        public static object Construct(Type classType, params Type[] argTypes) => ioc.Construct(classType, argTypes);
+        public static TClass Construct<TClass>(params Type[] argTypes) => activator.Construct<TClass>(argTypes);
+        public static object Construct(Type classType, params Type[] argTypes) => activator.Construct(classType, argTypes);
 
         /// <summary>
         /// Construct TClass by longest args constructor.
         /// </summary>
         /// <typeparam name="TClass"></typeparam>
         /// <returns></returns>
-        public static TClass ConstructByLongestArgs<TClass>() => ioc.ConstructByLongestArgs<TClass>();
-        public static object ConstructByLongestArgs(Type classType) => ioc.ConstructByLongestArgs(classType);
+        public static TClass ConstructByLongestArgs<TClass>() => activator.ConstructByLongestArgs<TClass>();
+        public static object ConstructByLongestArgs(Type classType) => activator.ConstructByLongestArgs(classType);
     }
 }

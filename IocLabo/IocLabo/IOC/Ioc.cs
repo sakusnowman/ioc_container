@@ -46,27 +46,5 @@ namespace IocLabo.IOC
         {
             throw new NotImplementedException();
         }
-
-        public TClass Construct<TClass>(params Type[] argTypes)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object Construct(Type classType, params Type[] argTypes)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TClass ConstructByLongestArgs<TClass>()
-        {
-            throw new NotImplementedException();
-        }
-
-        public object ConstructByLongestArgs(Type classType)
-        {
-            throw new NotImplementedException();
-        }
-
-        
     }
 }
