@@ -70,12 +70,28 @@ namespace IocLabo.Tests
         }
 
         [TestMethod]
+        public void Resolve_IBaseWhenRegisteredSingleton_ResolveSingletonBase()
+        {
+            // Arrange
+            var single = new Base();
+            Labo.RegisterSingleton<IBase>(single);
+            Labo.Resolve<IBase>();
+            Labo.Resolve(typeof(IBase));
+            // Act
+            var result = Labo.Resolve<IBase>();
+            // Assert
+            Assert.AreEqual(single, result);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(IOCException))]
         public void Resolve_IBaseWhenIsNotRegistered_ThrowException()
         {
             // Act
             var result = Labo.Resolve<IBase>();
         }
+
+       
 
         private interface IBase
         {
