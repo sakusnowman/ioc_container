@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IocLabo.Activator
+namespace IocLabo.Activators
 {
     public interface ILaboActivator
     {
@@ -24,5 +24,15 @@ namespace IocLabo.Activator
         /// <returns></returns>
         TClass ConstructByLongestArgs<TClass>();
         object ConstructByLongestArgs(Type classType);
+
+
+
+        ///// <summary>
+        ///// Resolve object which is implemented TInterface.
+        ///// </summary>
+        ///// <typeparam name="TInterface">This is must be registered before you use.</typeparam>
+        ///// <returns> Singleton object is resolved, if you registered both implement and singleton.</returns>
+        //TInterface Resolve<TInterface>();
+        //object Resolve(Type interfaceType);
     }
 }

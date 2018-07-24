@@ -4,12 +4,12 @@ using System.Text;
 
 namespace IocLabo.IOC
 {
-    class Ioc : IIoc
+    class IoCContainer : IIoCContainer
     {
         private Dictionary<Type, Type> interfaceTable;
         private Dictionary<Type, object> singletonTable;
 
-        public Ioc()
+        public IoCContainer()
         {
             interfaceTable = new Dictionary<Type, Type>();
             singletonTable = new Dictionary<Type, object>();
@@ -37,14 +37,32 @@ namespace IocLabo.IOC
             singletonTable.Add(typeof(TInterface), value);
         }
 
-        public TInterface Resolve<TInterface>()
+        public bool IsRegistered<TInterface>() => IsRegistered(typeof(TInterface));
+        public bool IsRegistered(Type interfaceType)
         {
-            throw new NotImplementedException();
+            return interfaceTable.ContainsKey(interfaceType) ||
+                singletonTable.ContainsKey(interfaceType);
         }
 
-        public object Resolve(Type interfaceType)
+        public TInterface GetSingleton<TInterface>() => (TInterface)GetSingleton(typeof(TInterface));
+
+        public object GetSingleton(Type interfaceType)
         {
-            throw new NotImplementedException();
+            if (singletonTable.ContainsKey(interfaceType))
+            {
+                return singletonTable[interfaceType];
+            }
+            throw IOCException.NotRegisteredException(interfaceType);
+        }
+
+        public Type GetImplementType<TInterface>() => GetImplementType(typeof(TInterface));
+        public Type GetImplementType(Type interfaceType)
+        {
+            if (interfaceTable.ContainsKey(interfaceType))
+            {
+                return interfaceTable[interfaceType];
+            }
+            throw IOCException.NotRegisteredException(interfaceType);
         }
     }
 }

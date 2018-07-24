@@ -12,13 +12,20 @@ namespace IocLabo.IOC
         public IOCException(string message, Exception innerException) : base(message, innerException){}
         protected IOCException(SerializationInfo info, StreamingContext context) : base(info, context){}
 
+        public static IOCException NotRegisteredException(Type type)
+        {
+            StringBuilder message = new StringBuilder();
+            message.Append(type.ToString());
+            message.Append(" is not registered.");
+            return new IOCException(message.ToString());
+        }
+
         public static IOCException NotInterfaceException(Type notInterfaceType)
         {
             StringBuilder message = new StringBuilder();
             message.AppendLine(notInterfaceType.ToString() + " is not interface.");
             return new IOCException(message.ToString());
         }
-
 
         public static void CheckImplementedInterface(Type interfaceType, Type implementedType)
         {

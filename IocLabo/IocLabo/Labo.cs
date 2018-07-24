@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using IocLabo.IOC;
-using IocLabo.Activator;
+using IocLabo.Activators;
 
 namespace IocLabo
 {
@@ -13,7 +13,7 @@ namespace IocLabo
     /// </summary>
     public class Labo
     {
-        static private IIoc ioc = new Ioc();
+        static private IIoCContainer ioc = new IoCContainer();
         static private ILaboActivator activator = new LaboActivator(ioc);
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace IocLabo
         /// </summary>
         public static void Reset()
         {
-            ioc = new Ioc();
+            ioc = new IoCContainer();
             activator = new LaboActivator(ioc);
         }
 
@@ -41,11 +41,23 @@ namespace IocLabo
 
         /// <summary>
         /// Resolve object which is implemented TInterface.
+        /// Construct object by longest parameters constractor, if you register only implementType.
         /// </summary>
         /// <typeparam name="TInterface">This is must be registered before you use.</typeparam>
-        /// <returns> Singleton object is resolved, if you registered both implement and singleton.</returns>
-        public static TInterface Resolve<TInterface>() => ioc.Resolve<TInterface>();
-        public static object Resolve(Type interfaceType) => ioc.Resolve(interfaceType);
+        /// <returns> Singleton object is resolved, if you registered both implementType and singleton.</returns>
+        public static object Resolve(Type interfaceType)
+        {
+            if (ioc.IsRegistered(interfaceType) == false) throw IOCException.NotRegisteredException(interfaceType);
+            try
+            {
+                return ioc.GetSingleton(interfaceType);
+            }
+            catch (IOCException e)
+            {
+                return activator.ConstructByLongestArgs(ioc.GetImplementType(interfaceType));
+            }
+        }
+        public static TInterface Resolve<TInterface>() => (TInterface)Resolve(typeof(TInterface));
 
         /// <summary>
         /// Construct TClass by argTypes parameter constructor.

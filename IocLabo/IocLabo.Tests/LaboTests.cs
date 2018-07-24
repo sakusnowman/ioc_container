@@ -58,6 +58,25 @@ namespace IocLabo.Tests
             Labo.RegisterSingleton<IBase>(new Sub());
         }
 
+        [TestMethod]
+        public void Resolve_IBaseWhenRegisteredIBaseWithBase_ResolveBase()
+        {
+            // Arrange
+            Labo.Register<IBase, Base>();
+            // Act
+            var result = Labo.Resolve<IBase>();
+            // Assert
+            Assert.AreEqual(typeof(Base), result.GetType());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IOCException))]
+        public void Resolve_IBaseWhenIsNotRegistered_ThrowException()
+        {
+            // Act
+            var result = Labo.Resolve<IBase>();
+        }
+
         private interface IBase
         {
             void Method();
@@ -72,6 +91,4 @@ namespace IocLabo.Tests
         private class SubBase : Base { }
         private class Sub { }
     }
-
-    
 }
