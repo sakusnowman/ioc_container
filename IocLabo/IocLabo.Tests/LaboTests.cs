@@ -38,6 +38,25 @@ namespace IocLabo.Tests
             Labo.Register<IBase, Sub>();
         }
 
+        [TestMethod]
+        public void RegisterSingleton_IBaseWithBase_Success()
+        {
+            Labo.RegisterSingleton<IBase>(new Base());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IOCException))]
+        public void RegisterSingleton_NotInterfaceClass_ThrowExeption()
+        {
+            Labo.RegisterSingleton<Base>(new SubBase());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IOCException))]
+        public void RegisterSingleton_NotImplementClass_ThrowExeption()
+        {
+            Labo.RegisterSingleton<IBase>(new Sub());
+        }
 
         private interface IBase
         {

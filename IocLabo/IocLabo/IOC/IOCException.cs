@@ -19,19 +19,27 @@ namespace IocLabo.IOC
             return new IOCException(message.ToString());
         }
 
-        public static void CheckImplementedInterface<TInterface, TImplement>()
+
+        public static void CheckImplementedInterface(Type interfaceType, Type implementedType)
         {
-            if (typeof(TInterface).IsInterface == false) throw NotInterfaceException(typeof(TInterface));
+            if (interfaceType.IsInterface == false) throw NotInterfaceException(interfaceType);
             try
             {
-                typeof(TImplement).GetInterfaceMap(typeof(TInterface));
-            }catch(Exception e)
+                implementedType.GetInterfaceMap(interfaceType);
+            }
+            catch (Exception e)
             {
                 StringBuilder message = new StringBuilder();
-                message.Append(typeof(TImplement).ToString());
-                message.Append(" is not implemented " + typeof(TInterface).ToString() + ".");
+                message.Append(implementedType.ToString());
+                message.Append(" is not implemented " + interfaceType.ToString() + ".");
                 throw new IOCException(message.ToString(), e);
             }
         }
+
+        public static void CheckImplementedInterface<TInterface>(Type type)
+            => CheckImplementedInterface(typeof(TInterface), type);
+
+        public static void CheckImplementedInterface<TInterface, TImplement>() 
+            => CheckImplementedInterface<TInterface>(typeof(TImplement));
     }
 }

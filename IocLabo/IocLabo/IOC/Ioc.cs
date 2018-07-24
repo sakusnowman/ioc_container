@@ -7,9 +7,12 @@ namespace IocLabo.IOC
     class Ioc : IIoc
     {
         private Dictionary<Type, Type> interfaceTable;
+        private Dictionary<Type, object> singletonTable;
+
         public Ioc()
         {
             interfaceTable = new Dictionary<Type, Type>();
+            singletonTable = new Dictionary<Type, object>();
         }
 
         public void Register<TInterface, TImplement>()
@@ -25,7 +28,13 @@ namespace IocLabo.IOC
 
         public void RegisterSingleton<TInterface>(object value)
         {
-            throw new NotImplementedException();
+            IOCException.CheckImplementedInterface<TInterface>(value.GetType());
+            if (singletonTable.ContainsKey(typeof(TInterface)))
+            {
+                singletonTable[typeof(TInterface)] = value;
+                return;
+            }
+            singletonTable.Add(typeof(TInterface), value);
         }
 
         public TInterface Resolve<TInterface>()

@@ -8,6 +8,7 @@ namespace IocLabo
     /// <summary>
     /// This class support IoC pattern.
     /// You can easyily to use IoC Container.
+    /// This methods are not supported null object;
     /// </summary>
     public class Labo
     {
