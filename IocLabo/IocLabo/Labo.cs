@@ -11,6 +11,9 @@ namespace IocLabo
     /// You can easyily to use IoC Container.
     /// This methods are not supported null object;
     /// </summary>
+    /// <remarks>
+    /// This class can Reset, Register, RegisterSingleton, Resolve, Construct and ConstructLongestArgs
+    /// </remarks>
     public class Labo
     {
         static private IIoCContainer ioc = new IoCContainer();
@@ -57,6 +60,7 @@ namespace IocLabo
                 return activator.ConstructByLongestArgs(ioc.GetImplementType(interfaceType));
             }
         }
+        ///<see cref="Resolve(Type)"/>
         public static TInterface Resolve<TInterface>() => (TInterface)Resolve(typeof(TInterface));
 
         /// <summary>
@@ -68,6 +72,7 @@ namespace IocLabo
         /// <param name="argTypes">TClass must have constructor which has these argTypes parameter.</param>
         /// <returns></returns>
         public static TClass Construct<TClass>(params Type[] argTypes) => activator.Construct<TClass>(argTypes);
+        ///<see cref="Construct{TClass}(Type[])"/>
         public static object Construct(Type classType, params Type[] argTypes) => activator.Construct(classType, argTypes);
 
         /// <summary>
@@ -76,6 +81,10 @@ namespace IocLabo
         /// <typeparam name="TClass"></typeparam>
         /// <returns></returns>
         public static TClass ConstructByLongestArgs<TClass>() => activator.ConstructByLongestArgs<TClass>();
+       
+        /// <summary>
+        /// <see cref="ConstructByLongestArgs{TClass}"/>
+        /// </summary>
         public static object ConstructByLongestArgs(Type classType) => activator.ConstructByLongestArgs(classType);
     }
 }

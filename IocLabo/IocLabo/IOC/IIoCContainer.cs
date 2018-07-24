@@ -29,6 +29,7 @@ namespace IocLabo.IOC
         /// <typeparam name="TInterface">Interface class</typeparam>
         /// <returns></returns>
         bool IsRegistered<TInterface>();
+        /// <see cref="IsRegistered{TInterface}"/>
         bool IsRegistered(Type interfaceType);
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace IocLabo.IOC
         /// <typeparam name="TInterface">Interface class</typeparam>
         /// <returns></returns>
         TInterface GetSingleton<TInterface>();
+        /// <see cref="GetSingleton{TInterface}"/>
         object GetSingleton(Type interfaceType);
 
 
@@ -48,6 +50,7 @@ namespace IocLabo.IOC
         /// <typeparam name="TInterface">Interface class</typeparam>
         /// <returns></returns>
         Type GetImplementType<TInterface>();
+        /// <see cref="GetImplementType{TInterface}"/>
         Type GetImplementType(Type interfaceType);
     }
 }
