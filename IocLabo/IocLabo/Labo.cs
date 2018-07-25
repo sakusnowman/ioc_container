@@ -19,14 +19,16 @@ namespace IocLabo
         static private IIoCContainer ioc = new IoCContainer();
         static private ILaboActivator activator = new LaboActivator(ioc);
 
+        public static void SetIocAndActivator(IIoCContainer ioC, ILaboActivator laboActivator)
+        {
+            ioc = ioC;
+            activator = laboActivator;
+        }
+
         /// <summary>
         /// Reset registerd classes.
         /// </summary>
-        public static void Reset()
-        {
-            ioc = new IoCContainer();
-            activator = new LaboActivator(ioc);
-        }
+        public static void Reset() => ioc.Reset();
 
         /// <summary>
         /// Register interface use which implement class.

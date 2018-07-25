@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IocLabo.IOC
 {
-    class IoCContainer : IIoCContainer
+    public class IoCContainer : IIoCContainer
     {
         private Dictionary<Type, Type> interfaceTable;
         private Dictionary<Type, object> singletonTable;
@@ -63,6 +63,12 @@ namespace IocLabo.IOC
                 return interfaceTable[interfaceType];
             }
             throw IOCException.NotRegisteredException(interfaceType);
+        }
+
+        public void Reset()
+        {
+            singletonTable.Clear();
+            interfaceTable.Clear();
         }
     }
 }

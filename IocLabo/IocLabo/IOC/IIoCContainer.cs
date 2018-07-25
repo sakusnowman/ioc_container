@@ -52,5 +52,10 @@ namespace IocLabo.IOC
         Type GetImplementType<TInterface>();
         /// <see cref="GetImplementType{TInterface}"/>
         Type GetImplementType(Type interfaceType);
+
+        /// <summary>
+        /// Reset registerd classes.
+        /// </summary>
+        void Reset();
     }
 }
