@@ -18,7 +18,7 @@ namespace IocLabo.IOC
         public void Register<TInterface, TImplement>()
         {
             IOCException.CheckImplementedInterface<TInterface, TImplement>();
-            if (interfaceTable.ContainsKey(typeof(TInterface)))
+            if (IsRegisteredImplement<TInterface>())
             {
                 interfaceTable[typeof(TInterface)] = typeof(TImplement);
                 return;
@@ -29,7 +29,7 @@ namespace IocLabo.IOC
         public void RegisterSingleton<TInterface>(object value)
         {
             IOCException.CheckImplementedInterface<TInterface>(value.GetType());
-            if (singletonTable.ContainsKey(typeof(TInterface)))
+            if (IsRegisteredSingleton<TInterface>())
             {
                 singletonTable[typeof(TInterface)] = value;
                 return;
@@ -37,18 +37,11 @@ namespace IocLabo.IOC
             singletonTable.Add(typeof(TInterface), value);
         }
 
-        public bool IsRegistered<TInterface>() => IsRegistered(typeof(TInterface));
-        public bool IsRegistered(Type interfaceType)
-        {
-            return interfaceTable.ContainsKey(interfaceType) ||
-                singletonTable.ContainsKey(interfaceType);
-        }
-
         public TInterface GetSingleton<TInterface>() => (TInterface)GetSingleton(typeof(TInterface));
 
         public object GetSingleton(Type interfaceType)
         {
-            if (singletonTable.ContainsKey(interfaceType))
+            if (IsRegisteredSingleton(interfaceType))
             {
                 return singletonTable[interfaceType];
             }
@@ -58,7 +51,7 @@ namespace IocLabo.IOC
         public Type GetImplementType<TInterface>() => GetImplementType(typeof(TInterface));
         public Type GetImplementType(Type interfaceType)
         {
-            if (interfaceTable.ContainsKey(interfaceType))
+            if (IsRegisteredImplement(interfaceType))
             {
                 return interfaceTable[interfaceType];
             }
@@ -69,6 +62,26 @@ namespace IocLabo.IOC
         {
             singletonTable.Clear();
             interfaceTable.Clear();
+        }
+
+        public bool IsRegistered<TInterface>() => IsRegistered(typeof(TInterface));
+        public bool IsRegistered(Type interfaceType)
+        {
+            return IsRegisteredSingleton(interfaceType) || IsRegisteredImplement(interfaceType);
+        }
+
+        public bool IsRegisteredSingleton<TInterface>() => IsRegisteredSingleton(typeof(TInterface));
+
+        public bool IsRegisteredSingleton(Type interfaceType)
+        {
+            return singletonTable.ContainsKey(interfaceType);
+        }
+
+        public bool IsRegisteredImplement<Tinterface>() => IsRegisteredImplement(typeof(Tinterface));
+
+        public bool IsRegisteredImplement(Type interfaceType)
+        {
+            return interfaceTable.ContainsKey(interfaceType);
         }
     }
 }
