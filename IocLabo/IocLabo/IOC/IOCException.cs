@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IocLabo.IOC
 {
-    public class IOCException : Exception
+    public class IOCException : IocLaboException
     {
         public IOCException(){}
         public IOCException(string message) : base(message) { }
