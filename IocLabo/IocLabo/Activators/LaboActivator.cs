@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using IocLabo.IOC;
 
 namespace IocLabo.Activators
@@ -21,14 +19,18 @@ namespace IocLabo.Activators
         {
             try
             {
-                object[] args = argTypes.Select(at => GetDefaultValue(at)).ToArray();
+                var constructor = classType.GetConstructor(argTypes);
+                object[] args = constructor.GetParameters().Select(p =>
+                {
+                    if (p.HasDefaultValue) return p.DefaultValue;
+                    return GetDefaultValue(p.ParameterType);
+                }).ToArray();
                 return Activator.CreateInstance(classType, args);
             }
             catch (Exception e)
             {
                 throw new ActivatorException("Failed to Construct Instance", e);
             }
-
         }
 
         public TClass ConstructByLongestArgs<TClass>() => (TClass)ConstructByLongestArgs(typeof(TClass));
@@ -37,6 +39,7 @@ namespace IocLabo.Activators
         {
             var constructors = classType.GetConstructors();
             if (constructors.Count() == 0) return GetDefaultValue(classType);
+
             var longestConstructor = constructors.
                 OrderByDescending(c => c.GetParameters().Count()).First();
             var parameterTypes = longestConstructor.GetParameters().Select(p => p.ParameterType);
@@ -46,7 +49,7 @@ namespace IocLabo.Activators
         public TClass GetDefaultValue<TClass>() => (TClass)GetDefaultValue(typeof(TClass));
         public object GetDefaultValue(Type type)
         {
-            if(type.IsInterface) return GetInterfaceRegisteredValue(type);
+            if (type.IsInterface) return GetInterfaceRegisteredValue(type);
             if (type.IsValueType) return Activator.CreateInstance(type);
 
             if (type.Equals(typeof(string))) return "";

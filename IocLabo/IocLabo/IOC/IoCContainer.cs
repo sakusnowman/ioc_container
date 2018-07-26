@@ -37,8 +37,6 @@ namespace IocLabo.IOC
             singletonTable.Add(typeof(TInterface), value);
         }
 
-       
-
         public TInterface GetSingleton<TInterface>() => (TInterface)GetSingleton(typeof(TInterface));
 
         public object GetSingleton(Type interfaceType)
