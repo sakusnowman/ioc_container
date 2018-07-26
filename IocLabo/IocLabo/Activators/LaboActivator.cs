@@ -6,7 +6,7 @@ using IocLabo.IOC;
 
 namespace IocLabo.Activators
 {
-    class LaboActivator : ILaboActivator
+    public class LaboActivator : ILaboActivator
     {
         private readonly IIoCContainer ioc;
 
@@ -19,7 +19,16 @@ namespace IocLabo.Activators
 
         public object Construct(Type classType, params Type[] argTypes)
         {
-            return Activator.CreateInstance(classType, argTypes);
+            try
+            {
+                object[] args = argTypes.Select(at => GetDefaultValue(at)).ToArray();
+                return Activator.CreateInstance(classType, args);
+            }
+            catch (Exception e)
+            {
+                throw new ActivatorException("Failed to Construct Instance", e);
+            }
+
         }
 
         public TClass ConstructByLongestArgs<TClass>() => (TClass)ConstructByLongestArgs(typeof(TClass));
@@ -27,11 +36,29 @@ namespace IocLabo.Activators
         public object ConstructByLongestArgs(Type classType)
         {
             var constructors = classType.GetConstructors();
-            if (constructors.Count() == 0) return Activator.CreateInstance(classType);
+            if (constructors.Count() == 0) return GetDefaultValue(classType);
             var longestConstructor = constructors.
                 OrderByDescending(c => c.GetParameters().Count()).First();
             var parameterTypes = longestConstructor.GetParameters().Select(p => p.ParameterType);
             return Construct(classType, parameterTypes.ToArray());
+        }
+
+        public TClass GetDefaultValue<TClass>() => (TClass)GetDefaultValue(typeof(TClass));
+        public object GetDefaultValue(Type type)
+        {
+            if(type.IsInterface) return GetInterfaceRegisteredValue(type);
+            if (type.IsValueType) return Activator.CreateInstance(type);
+
+            if (type.Equals(typeof(string))) return "";
+
+            return null;
+        }
+
+        private object GetInterfaceRegisteredValue(Type interfaceType)
+        {
+            if (ioc.IsRegisteredSingleton(interfaceType))
+                return ioc.GetSingleton(interfaceType);
+            return ConstructByLongestArgs(ioc.GetImplementType(interfaceType));
         }
     }
 }

@@ -33,6 +33,25 @@ namespace IocLabo.IOC
         bool IsRegistered(Type interfaceType);
 
         /// <summary>
+        /// Check TInterface is registered singleton.
+        /// </summary>
+        /// <typeparam name="TInterface">interface class</typeparam>
+        /// <returns></returns>
+        bool IsRegisteredSingleton<TInterface>();
+        /// <see cref="IsRegisteredSingleton{TInterface}"/>
+        bool IsRegisteredSingleton(Type interfaceType);
+
+
+        /// <summary>
+        /// Check TInterface is registered Implement.
+        /// </summary>
+        /// <typeparam name="Tinterface">interface class</typeparam>
+        /// <returns></returns>
+        bool IsRegisteredImplement<Tinterface>();
+        /// <see cref="IsRegisteredImplement{Tinterface}"/>
+        bool IsRegisteredImplement(Type interfaceType);
+
+        /// <summary>
         /// Get singleton object which is registered,
         /// if it is regiseterd.
         /// </summary>

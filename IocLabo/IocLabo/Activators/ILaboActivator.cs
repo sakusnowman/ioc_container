@@ -26,6 +26,10 @@ namespace IocLabo.Activators
         object ConstructByLongestArgs(Type classType);
 
 
+        TClass GetDefaultValue<TClass>();
+        object GetDefaultValue(Type type);
+
+
 
         ///// <summary>
         ///// Resolve object which is implemented TInterface.
